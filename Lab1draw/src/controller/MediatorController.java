@@ -4,11 +4,13 @@ package controller;
  * 2017-03
  */
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.scene.paint.Color;
 import model.pojo.FormattingObject;
 import model.pojo.ShapeType;
+import model.shapes.Shape;
 
 public class MediatorController implements MediatorControllerInterface, Observer{
 
@@ -73,11 +75,19 @@ public class MediatorController implements MediatorControllerInterface, Observer
 		}
 		if(obs instanceof ShapeType ){
 			System.out.println(this.shapeMenuController.ObjectShapeClass().toStringAll());
-			
+			this.canvasController.addShape(this.shapeMenuController.ObjectShapeClass());
 			//Send formating object to canvas here
 		}
 	}
 
+	public void loadSaveFile(ArrayList<Shape> list){
+		this.canvasController.load(list);
+	}
+	
+	public ArrayList<Shape> getShapeList(){
+		return this.canvasController.getShapes();
+	}
+	
 	@Override
 	public FormattingObject getFormattingClass() {
 		return null;
