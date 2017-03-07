@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import model.pojo.FormattingObject;
 
 public class FormatController implements Initializable{
@@ -30,17 +31,15 @@ public class FormatController implements Initializable{
 	@FXML private Label labelWidth;
 	@FXML private HBox FormatMenu;
 	@FXML private Button undoButton;
-
+	@FXML private Button redoButton;
 	private FormattingObject formatObject;
 	private ResourceBundle bundle;
-	 
 	ObservableList<String> list;;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 	
 		 bundle = ResourceBundle.getBundle("bundles.loadingBundle", new Locale("fo", "FO"));
-		 System.out.println(bundle.getString("color"));
 		// Fill box setting
 		list = FXCollections.observableArrayList(bundle.getString("fill1"),bundle.getString("fill2"));
 		fillbox.setItems(list);
@@ -50,12 +49,14 @@ public class FormatController implements Initializable{
 			formatObject.setFill(fillbox.getValue());
 		});
 		//ColourBox
+		colourChooser.setValue(Color.web(bundle.getString("color")));
 		colourChooser.valueProperty().addListener(E ->{
 			formatObject.setColour(colourChooser.getValue());
 		
 		});
 		// Slider and Label
-		String val = Integer.toString((int) widthChooser.getValue());
+		String val =bundle.getString("width");
+		widthChooser.setValue(Double.valueOf(val));
 		labelWidth.setText(val);
 		widthChooser.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
@@ -86,6 +87,9 @@ public class FormatController implements Initializable{
 	}
 	
 	public void eventUndo(){
+		MediatorController.getInstance().undo();
+	}
+	public void eventRedo(){
 		MediatorController.getInstance().undo();
 	}
 

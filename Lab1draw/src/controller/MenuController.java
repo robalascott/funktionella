@@ -86,6 +86,7 @@ public class MenuController implements Initializable{
 		dialog.setContentText("Enter filename:");
 		dialog.setGraphic(new ImageView(this.getClass().getResource("/view/images/save-icon.png").toString()));
 		
+		
 		Optional<String> result = dialog.showAndWait();
 		
 		result.ifPresent(filename -> {

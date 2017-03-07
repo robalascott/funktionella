@@ -19,6 +19,7 @@
             <Slider fx:id="widthChooser" prefHeight="27.0" prefWidth="140.0" />
             <Label fx:id="labelWidth" prefHeight="26.0" prefWidth="39.0" text="Label" />
             <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" onAction="#eventUndo"/>
+          <Button fx:id="redoButton" mnemonicParsing="false" text="Redo" onAction="#eventRedo"/>
          </children></HBox>
    </children>
 </AnchorPane>
