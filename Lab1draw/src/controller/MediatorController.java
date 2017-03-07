@@ -6,6 +6,7 @@ package controller;
 
 import java.util.Observable;
 import java.util.Observer;
+import javafx.scene.paint.Color;
 import model.pojo.FormattingObject;
 import model.pojo.ShapeType;
 
@@ -15,6 +16,7 @@ public class MediatorController implements MediatorControllerInterface, Observer
 	private FormatController formatController;
 	private ShapeMenuController shapeMenuController;
 	private CanvasController canvasController;
+	
 
 	/*Observable Class*/
 	private MediatorController() {

@@ -1,8 +1,11 @@
 package controller;
-
+/*HI2011, Laboration i designmönster
+ * Robert Scott & Dainel Östberg
+ * 2017-03
+ */
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,8 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-
 import model.pojo.FormattingObject;
 
 public class FormatController implements Initializable{
@@ -31,13 +32,17 @@ public class FormatController implements Initializable{
 	@FXML private Button undoButton;
 
 	private FormattingObject formatObject;
-
-	ObservableList<String> list = FXCollections.observableArrayList("No", "Yes");
+	private ResourceBundle bundle;
+	 
+	ObservableList<String> list;;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 	
+		 bundle = ResourceBundle.getBundle("bundles.loadingBundle", new Locale("fo", "FO"));
+		 System.out.println(bundle.getString("color"));
 		// Fill box setting
+		list = FXCollections.observableArrayList(bundle.getString("fill1"),bundle.getString("fill2"));
 		fillbox.setItems(list);
 		fillbox.setTooltip(new Tooltip("Select Fill"));
 		fillbox.setValue(list.get(0));
@@ -88,11 +93,9 @@ public class FormatController implements Initializable{
 		if(object != null){
 			this.formatObject.resetObject(object);
 			fillbox.setValue(object.getFill());
-			/*
 			colourChooser.setValue(object.getColour());
 			formatObject.setWidth(object.getWidth());
 			labelWidth.setText(Integer.toString(object.getWidth()));	
-			*/
 			System.out.println(object.toStringAll());
 		}
 	}
