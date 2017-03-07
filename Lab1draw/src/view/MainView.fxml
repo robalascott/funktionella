@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="700.0" maxWidth="500.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" stylesheets="view/application.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+	<children>
+		<BorderPane fx:id="MainView" prefHeight="500.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+			<top>
+			     <VBox>
+			     	<fx:include fx:id="menu" source="Menu.fxml" />
+					<fx:include fx:id="format" source="Format.fxml" BorderPane.alignment="TOP_LEFT" />
+				</VBox>
+			</top>
+         <right>
+				<fx:include fx:id="shapeMenu" source="ShapeMenu.fxml" BorderPane.alignment="TOP_RIGHT" />
+         </right>
+         <left>
+            <fx:include fx:id="canvas" source="Canvas.fxml" />       
+         </left>		
+		</BorderPane>
+	</children>
+</AnchorPane>
