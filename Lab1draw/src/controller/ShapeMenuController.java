@@ -13,6 +13,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import model.pojo.ShapeType;
+import model.shapes.ShapeFactory;
 
 public class ShapeMenuController implements Initializable {
 	@FXML private VBox ShapeMenu;
@@ -26,6 +27,15 @@ public class ShapeMenuController implements Initializable {
 		ShapeMenu.setPadding(new Insets(5, 5, 5, 5));
 		ShapeMenu.setSpacing(5);
 
+		ShapeFactory.getAvailableShapes();
+		for(String shape : ShapeFactory.getAvailableShapes()){
+			btn = new ToggleButton(shape);
+			btn.setPrefSize(100, 50);
+			btn.setToggleGroup(toggleGroup);
+			btn.setUserData(shape);
+			ShapeMenu.getChildren().add(btn);
+		}
+		/*
 		for (int i = 0; i < 8; i++) {
 			btn = new ToggleButton("Button" + i);
 			btn.setPrefSize(100, 50);
@@ -33,6 +43,7 @@ public class ShapeMenuController implements Initializable {
 			btn.setUserData("Button" + i);
 			ShapeMenu.getChildren().add(btn);
 		};
+		*/
 		toggleGroup.selectedToggleProperty().addListener(E -> {
 			try{
 				this.shapeType.setShapeName(toggleGroup.getSelectedToggle().getUserData().toString());
