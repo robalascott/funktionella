@@ -31,8 +31,7 @@ public class Line extends Shape{
 	
 	@Override
 	public void draw(GraphicsContext gc) {
-		gc.setFill(Color.GREEN);
-        gc.setStroke(Color.BLUE);
+        gc.setStroke(color);
         gc.setLineWidth(5);
         gc.strokeLine(x+x1,y+y1,x+x2,y+y2);
 	}

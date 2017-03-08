@@ -79,7 +79,7 @@ public class CanvasController implements Initializable {
 	    			}
 	    		}
 	    		// Redraw shapes since something was changed
-				System.out.println("Change in list");
+				//System.out.println("Change in list");
 				clearDrawShapes();	
 	    	});
 	    	//System.out.println("Got type: " + test.get(0).getType());
@@ -182,6 +182,11 @@ public class CanvasController implements Initializable {
 		this.formatObject = formattingClass;
 		for(Shape s : selected){
 			s.setColor(formattingClass.getColour());
+			// Might want a boolean instead
+			if(formattingClass.getFill().equals("Yes"))
+				s.setFill(true);
+			else
+				s.setFill(false);
 		}
 		clearDrawShapes();
 	}

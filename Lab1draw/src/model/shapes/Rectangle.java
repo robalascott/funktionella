@@ -11,8 +11,6 @@ public class Rectangle extends Shape{
 	private double startWidth, startHeight;
 
 	double width = 50,height = 50;
-	// Might want different margins for side and continuation of line
-	// and mby another for reshape clicks
 	double MARGIN = 5;
 	
 	public Rectangle() {
@@ -26,68 +24,136 @@ public class Rectangle extends Shape{
 	
 	@Override
 	public void draw(GraphicsContext gc) {
-		gc.setFill(color);
-		gc.fillRect(x,y,width,height);
+		if(fill){
+			gc.setFill(color);
+			gc.fillRect(x,y,width,height);
+		}else{
+			gc.setStroke(color);
+			gc.strokeRect(x, y, width, height);
+		}
 	}
 
-	private double relativeX = 0, relativeY = 0;
+	private double difX = 0, difY=0;
+	
+	// TODO: Something is wrong, atleast one of the crossovers are a bit glitchy 
+	// causing the shape to "jump" away because of bad values, FIXED: but it's still
+	// a bit glitchy when moving diagonally fast, sometimes the shape is not updated 
+	// properly, crossover not updating width height is my guess, not that important though
+	
+	// TODO: For fun, could add reshape-points on the sides and not only corners
 	@Override
 	public boolean reshape(double clickX, double clickY) {
+		difX = mouseStartX-clickX;
+		difY = mouseStartY-clickY;
 		switch(selected){
 			case NE_CORNER:
-				
+				// We moved to SW Quadrant
+				if(startWidth-difX < 0 && startHeight+difY < 0){
+					System.out.println("From NE to SW");
+					shapeStartX = shapeStartX-startWidth;
+					shapeStartY = shapeStartY+startHeight;
+					mouseStartX = shapeStartX;
+					mouseStartY = shapeStartY+startHeight;
+					selected = MovePoint.SW_CORNER;
+				// We moved to NW Quadrant
+				}else if(startWidth-difX < 0){
+					System.out.println("From NE to NW");
+					System.out.println("Shapestart: " + shapeStartX + ", MouseStartX: " + mouseStartX);
+					mouseStartX = shapeStartX-startWidth;
+					shapeStartX = mouseStartX;
+					selected = MovePoint.NW_CORNER;
+					
+					System.out.println("Shapestart: " + shapeStartX + ", MouseStartX: " + mouseStartX);
+				// We moved to SE Quadrant
+				}else if(startHeight+difY < 0){
+					shapeStartY = shapeStartY+startHeight;
+					mouseStartY = shapeStartY+startHeight;
+					//mouseStartY = shapeStartY+startHeight*2;
+					selected = MovePoint.SE_CORNER;
+				}else{
+					//System.out.println("StartHeight: " + startHeight + ", DifY: " + difY);
+					y = shapeStartY-(mouseStartY-clickY);
+					x = shapeStartX;
+					height = startHeight+(mouseStartY-clickY);
+					width = startWidth-(mouseStartX-clickX);
+				}
 				changed.set(true);
 				return true;
 			case NW_CORNER:
-				// Invert to lower left
-				if((startHeight + (mouseStartY-clickY)) < 0){
-					// If we define an ofset and move the mouse starting point we 
-					// can use the same logic as if we clicked there from the begining
-					// and we don't have to define logic relative to all sides for all 
-					// sides, *phew*
-					relativeY += startHeight;
-					mouseStartY = y+startHeight;
+				// We moved to SE Quadrant
+				if((startHeight + (mouseStartY-clickY)) < 0 && startWidth + (mouseStartX-clickX) < 0){
+					System.out.println("From NW to SE");
+					shapeStartY = shapeStartY+startHeight;
+					mouseStartY = shapeStartY+startHeight;
+					shapeStartX = shapeStartX+startWidth;
+					mouseStartX = shapeStartX+startWidth;
+					selected = MovePoint.SE_CORNER;
+				// We moved to SW Quadrant
+				}else if((startHeight + (mouseStartY-clickY)) < 0){
+					mouseStartY = shapeStartY+startHeight*2;
+					shapeStartY = shapeStartY+startHeight;
 					selected = MovePoint.SW_CORNER;
-					/*
-					y = shapeStartX+startHeight;
-					x = clickX;
-					width = startWidth+(mouseStartX-clickX);
-					height = -(startHeight+(mouseStartY-clickY));
-					*/
+				// We moved to the NE Quadrant
 				}else if(startWidth + (mouseStartX-clickX) < 0){
-					System.out.println("OK");
-					// Logic goes here
-					relativeX += startWidth;
-					mouseStartX = x+startWidth;
+					shapeStartX = shapeStartX+startWidth;
+					mouseStartX = shapeStartX+startWidth;
 					selected = MovePoint.NE_CORNER;
-					
-				// Original side NW_CORNER
+				// Reforming Shape on this Quadrant
 				}else{
 					x = clickX;
 					y = clickY;
 					width = startWidth+(mouseStartX-clickX);
 					height = startHeight+(mouseStartY-clickY);
-					
 				}
-				System.out.println("NW Corner");
 				changed.set(true);
 				return true;
 			case SE_CORNER:
+				if(difY > startHeight && difX > startWidth){
+					System.out.println("From SE to NW");
+					shapeStartY -= startHeight;
+					shapeStartX -= startWidth;
+					mouseStartY = shapeStartY-startHeight;
+					mouseStartX = shapeStartX-startWidth;
+					selected = MovePoint.NW_CORNER;
+				}else if(difY > startHeight){
+					shapeStartY -= startHeight;
+					mouseStartY = shapeStartY;
+					selected = MovePoint.NE_CORNER;
+				}else if(difX > startWidth){
+					shapeStartX -= startWidth;
+					mouseStartX = shapeStartX;
+					selected = MovePoint.SW_CORNER;
+				}else{
+					x = shapeStartX;
+					y = shapeStartY;
+					width = startWidth-(mouseStartX-clickX);
+					height = startHeight-(mouseStartY-clickY);
+				}
 				changed.set(true);
 				return true;
 			case SW_CORNER:
-				/* Left side
-				x = shapeStartX-(mouseStartX-clickX);
-				y = shapeStartY;
-				width = startWidth+(mouseStartX-clickX);
-				height = startHeight;
-				*/
-				System.out.println("x: " + x + "y: " + y + "StartHeight: " + startHeight);
-				x = shapeStartX+relativeX-(mouseStartX-clickX);
-				y = shapeStartY+relativeY;
-				width = startWidth+(mouseStartX-clickX);
-				height = startHeight-(mouseStartY-clickY);
-				
+				// We moved to the NW Quadrant
+				if(difX < -startWidth && (startHeight - (mouseStartY-clickY)) < 0){
+					System.out.println("From SW to NE");
+					shapeStartX += startWidth;
+					mouseStartX = shapeStartX +startWidth;
+					mouseStartY = shapeStartY-startHeight;
+					shapeStartY = shapeStartY-startHeight;
+					selected = MovePoint.NE_CORNER;
+				}else if(difX < -startWidth){
+					shapeStartX += startWidth;
+					mouseStartX = shapeStartX +startWidth;
+					selected = MovePoint.SE_CORNER;
+				}else if((startHeight - (mouseStartY-clickY)) < 0){
+					mouseStartY = shapeStartY-startHeight;
+					shapeStartY = shapeStartY-startHeight;
+					selected = MovePoint.NW_CORNER;
+				}else{x = shapeStartX-(mouseStartX-clickX);
+					y = shapeStartY;
+					x = shapeStartX-difX;
+					width = startWidth+(mouseStartX-clickX);
+					height = startHeight-(mouseStartY-clickY);
+				}
 				changed.set(true);
 				return true;
 			case NONE: 
@@ -97,9 +163,22 @@ public class Rectangle extends Shape{
 		}
 	}
 
-	private boolean isMovePoint(double xAxel, double yAxel){
+	/* Left side
+	x = shapeStartX-(mouseStartX-clickX);
+	y = shapeStartY;
+	width = startWidth+(mouseStartX-clickX);
+	height = startHeight;
+	*/
+	@Override
+	public void startMoveEvent(double mouse_x, double mouse_y) {
+		super.startMoveEvent(mouse_x, mouse_y);
+		System.out.println("Setting vals in rec");
 		startHeight = height;
 		startWidth = width;
+	}
+	
+	private boolean isMovePoint(double xAxel, double yAxel){
+		
 		if(Math.abs(xAxel - x) < MARGIN && Math.abs(yAxel-y) < MARGIN){
 			selected = MovePoint.NW_CORNER;
 			return true;
@@ -135,20 +214,6 @@ public class Rectangle extends Shape{
 
 	@Override
 	String getType() {
-		return "Square";
+		return "Rectangle";
 	}
-	/*
-	@Override
-	public Line clone(){
-		try {
-			return (Line)super.clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	*/
-
-
 }

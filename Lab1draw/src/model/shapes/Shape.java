@@ -16,10 +16,21 @@ import javafx.util.Callback;
 // the shape relative to its starting position, (without calling 
 // startMoveEvent()), that would be cool
 
+// TODO: Add Move to front kinda functionality - focus selected mby
+
 // If we would have used the java.util.Observable, we would have extended shape with ti
 public abstract class Shape implements Cloneable, Serializable{
 	protected double x = 50,y = 50;
 	protected transient Color color = Color.PINK;
+	protected boolean fill = false;
+	
+	public void setFill(boolean b){
+		this.fill = b;
+	}
+	
+	public boolean isFilled(){
+		return fill;
+	}
 	
 	protected static SimpleBooleanProperty changed = new SimpleBooleanProperty(false);
 	
@@ -78,6 +89,7 @@ public abstract class Shape implements Cloneable, Serializable{
 	// to "jump/move" when starting a reshape 
 	protected double shapeStartX, shapeStartY, mouseStartX, mouseStartY;
 	public void startMoveEvent(double mouse_x, double mouse_y) {
+		System.out.println("setting vals in shape");
 		shapeStartX = x;
 		shapeStartY = y;
 		mouseStartX = mouse_x;

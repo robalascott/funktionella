@@ -6,7 +6,7 @@ import java.util.List;
 
 // TODO: Should have "repo" of prototyp shapes that are cloned upon request
 public abstract class ShapeFactory {
-	public final static List<String> validShapes = Arrays.asList("Line","Rectangle");
+	public final static List<String> validShapes = Arrays.asList("Line","Rectangle","Oval");
 	
 	public static List<Shape> prototypeShapes = getShapeList();
 	
@@ -19,6 +19,8 @@ public abstract class ShapeFactory {
 		prototypeShapes.add(pLine);
 		Rectangle pRec = new Rectangle();
 		prototypeShapes.add(pRec);
+		Oval pOval = new Oval();
+		prototypeShapes.add(pOval);
 		
 		}
 		return prototypeShapes;
@@ -36,6 +38,9 @@ public abstract class ShapeFactory {
 			case "rectangle":
 				System.out.println("Want Rectangle");
 				return prototypeShapes.get(1).clone();
+			case "oval":
+				System.out.println("Want oval");
+				return prototypeShapes.get(2).clone();
 			default:
 				return null;
 		}
