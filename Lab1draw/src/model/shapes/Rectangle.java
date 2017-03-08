@@ -1,6 +1,7 @@
 package model.shapes;
 
 import javafx.scene.canvas.GraphicsContext;
+import model.pojo.FormattingObject;
 
 public class Rectangle extends Shape{
 	
@@ -13,8 +14,8 @@ public class Rectangle extends Shape{
 	double width = 50,height = 50;
 	double MARGIN = 5;
 	
-	public Rectangle() {
-		// TODO Auto-generated constructor stub
+	public Rectangle(){
+		
 	}
 	
 	public Rectangle(double width, double height){
@@ -28,6 +29,7 @@ public class Rectangle extends Shape{
 			gc.setFill(color);
 			gc.fillRect(x,y,width,height);
 		}else{
+			//gc.setLineWidth(strokewidth);
 			gc.setStroke(color);
 			gc.strokeRect(x, y, width, height);
 		}

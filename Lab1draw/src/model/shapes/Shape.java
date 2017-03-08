@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import model.pojo.FormattingObject;
 
 // TODO: Think through if there is an alternate solution to moving
 // the shape relative to its starting position, (without calling 
@@ -23,6 +24,7 @@ public abstract class Shape implements Cloneable, Serializable{
 	protected double x = 50,y = 50;
 	protected transient Color color = Color.PINK;
 	protected boolean fill = false;
+	protected int strokewidth = 5;
 	
 	public void setFill(boolean b){
 		this.fill = b;
@@ -30,6 +32,16 @@ public abstract class Shape implements Cloneable, Serializable{
 	
 	public boolean isFilled(){
 		return fill;
+	}
+	
+	public void setFormat(FormattingObject format){
+		color = format.getColour();
+		if(format.getFill().equals("YES")){
+			fill = true;
+		}else{
+			fill = false;
+			strokewidth = format.getWidth();
+		}
 	}
 	
 	protected static SimpleBooleanProperty changed = new SimpleBooleanProperty(false);

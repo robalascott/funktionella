@@ -5,6 +5,7 @@ package controller;
  */
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -31,6 +32,7 @@ public class CanvasController implements Initializable {
 	private ObservableList<Shape> shapes;
 	//private ObservableList<Shape> selected;
 	 
+	private ResourceBundle bundle;
 	private double startX, startY;
 //	private UndoRedoFactory factory;;
 	private FormattingObject formatObject;
@@ -39,7 +41,8 @@ public class CanvasController implements Initializable {
 	 @Override
 		public void initialize(URL location, ResourceBundle resources) {
 	    	// Get the graphic context of Canvas to draw on
-		 
+		 	bundle = ResourceBundle.getBundle("bundles.loadingBundle", new Locale("fo","FO"));
+		 	formatObject = loadFormats(bundle);
 	    	gc = canvas.getGraphicsContext2D();
 	    	gc.setFill(Color.AQUAMARINE);
 	    	gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -79,7 +82,7 @@ public class CanvasController implements Initializable {
 	    			}
 	    		}
 	    		// Redraw shapes since something was changed
-				//System.out.println("Change in list");
+				System.out.println("Change in list");
 				clearDrawShapes();	
 	    	});
 	    	//System.out.println("Got type: " + test.get(0).getType());
@@ -183,7 +186,7 @@ public class CanvasController implements Initializable {
 		for(Shape s : selected){
 			s.setColor(formattingClass.getColour());
 			// Might want a boolean instead
-			if(formattingClass.getFill().equals("Yes"))
+			if(formattingClass.getFill().equals("YES"))
 				s.setFill(true);
 			else
 				s.setFill(false);
@@ -201,7 +204,9 @@ public class CanvasController implements Initializable {
 	
     public void AddShape(){
     	System.out.println("Adding shape: " + shapeType.getShapeName());
-    	shapes.add(ShapeFactory.getShape(shapeType.getShapeName()));
+    	Shape tmp = ShapeFactory.getShape(shapeType.getShapeName());
+    	tmp.setFormat(formatObject);
+    	shapes.add(tmp);
     }
     
     // Load function called by Mediator that replace the Shapes on the Canvas
@@ -220,5 +225,9 @@ public class CanvasController implements Initializable {
        	 save.add(s);
         }
         return save;
+	}
+	
+	public FormattingObject loadFormats(ResourceBundle resources){
+		return new FormattingObject(Color.web(bundle.getString("color")),Integer.valueOf(bundle.getString("width")),bundle.getString("fill1"));
 	}
 }
