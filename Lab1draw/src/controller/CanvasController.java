@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import controller.undo.Command;
+import controller.undo.UndoInvoker;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -22,21 +24,15 @@ import model.pojo.FormattingObject;
 import model.pojo.ShapeType;
 import model.shapes.Shape;
 import model.shapes.ShapeFactory;
-import model.shapes.UndoCommand;
-import model.shapes.UndoInvoker;
 
 public class CanvasController implements Initializable {
-	private GraphicsContext gc;
 	@FXML private Canvas canvas;
-	//private ArrayList<Shape> shapes;
-	private ArrayList<Shape> selected;
 	
+	private GraphicsContext gc;
+	private ArrayList<Shape> selected;
 	private ObservableList<Shape> shapes;
-	//private ObservableList<Shape> selected;
-	 
 	private ResourceBundle bundle;
 	private double startX, startY;
-//	private UndoRedoFactory factory;;
 	private FormattingObject formatObject;
 	private ShapeType shapeType;
 
@@ -205,7 +201,7 @@ public class CanvasController implements Initializable {
 		this.formatObject = formattingClass;
 		for(Shape s : selected){
 			
-			UndoInvoker.getInstance().addUndoCommand(new UndoCommand.UndoChangeColor(s, s.getColor()));
+			UndoInvoker.getInstance().addUndoCommand(new Command.UndoChangeColor(s, s.getColor()));
 			s.setColor(formattingClass.getColour());
 			// Might want a boolean instead
 			if(formattingClass.getFill().equals("YES"))
@@ -228,7 +224,7 @@ public class CanvasController implements Initializable {
     	Shape tmp = ShapeFactory.getShape(shapeType.getShapeName());
     	tmp.setFormat(formatObject);
     	shapes.add(tmp);
-    	UndoInvoker.getInstance().addUndoCommand(new UndoCommand.UndoAdd(tmp, shapes));
+    	UndoInvoker.getInstance().addUndoCommand(new Command.UndoAdd(tmp, shapes));
     }
     
     // Load function called by Mediator that replace the Shapes on the Canvas

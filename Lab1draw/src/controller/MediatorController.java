@@ -7,11 +7,11 @@ package controller;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import javafx.scene.paint.Color;
+
+import controller.undo.UndoInvoker;
 import model.pojo.FormattingObject;
 import model.pojo.ShapeType;
 import model.shapes.Shape;
-import model.shapes.UndoInvoker;
 
 
 
@@ -62,16 +62,10 @@ public class MediatorController implements MediatorControllerInterface, Observer
 	@Override
 	public void update(Observable obs, Object arg1) {
 		if (obs instanceof FormattingObject) {
-			System.out.println(this.formatController.getFormattingClass().toStringAll());
 			this.canvasController.add(this.formatController.getFormattingClass());
-			// UndoRedoManager.INSTANCE.add(this.formatController.getFormattingClass());
-
-			// Send formating object to canvas here
 		}
 		if (obs instanceof ShapeType) {
-			System.out.println(this.shapeMenuController.ObjectShapeClass().toStringAll());
 			this.canvasController.addShape(this.shapeMenuController.ObjectShapeClass());
-			// Send formating object to canvas here
 		}
 	}
 
@@ -83,23 +77,24 @@ public class MediatorController implements MediatorControllerInterface, Observer
 		return this.canvasController.getShapes();
 	}
 
-	@Override
-	public FormattingObject getFormattingClass() {
-		return null;
-	}
 
-	@Override
-	public ShapeType ObjectNameClass() {
-		return null;
-	}
-
-	@Override
 	public void undo() {
-		if(UndoInvoker.getInstance().execute()){
-			this.formatController.setDisableUndo(true);
-		}
+		UndoInvoker.getInstance().Undoexecute();
+		
+	}
 	
+	public void resetUndo(boolean b){
+		System.out.println("mediator " + b);
+		this.formatController.setDisableUndo(b);
+	}
 
+	public void resetRedo(Boolean b) {
+		System.out.println("mediator redo" + b);
+		this.formatController.setDisableRedo(b);
+	}
+
+	public void redo() {
+		UndoInvoker.getInstance().Redoexecute();		
 	}
 
 }

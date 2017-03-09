@@ -1,4 +1,8 @@
 package controller;
+/*HI2011, Laboration i designmönster
+ * Robert Scott & Dainel Östberg
+ * 2017-03
+ */
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -6,27 +10,20 @@ import java.io.IOException;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-/*HI2011, Laboration i designmönster
- * Robert Scott & Dainel Östberg
- * 2017-03
- */
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
+import controller.undo.UndoInvoker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.ToolBar;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import model.shapes.Shape;
-import model.shapes.UndoCommand;
-import model.shapes.UndoInvoker;
 
 
 public class MenuController implements Initializable{

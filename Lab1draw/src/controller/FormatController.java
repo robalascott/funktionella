@@ -40,7 +40,10 @@ public class FormatController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-	
+		//Set button on start
+		undoButton.setDisable(true);
+		redoButton.setDisable(true);
+		
 		 bundle = ResourceBundle.getBundle("bundles.loadingBundle", new Locale("fo", "FO"));
 		// Fill box setting
 		list = FXCollections.observableArrayList(bundle.getString("fill1"),bundle.getString("fill2"));
@@ -94,9 +97,11 @@ public class FormatController implements Initializable{
 	}
 
 	public void setDisableUndo(boolean b){
-			undoButton.setDisable(b);
+		undoButton.setDisable(b);
 	}
-	
+	public void setDisableRedo(Boolean b) {
+		redoButton.setDisable(b);
+	}
 	private FormattingObject getFormattingObject() {
 		return new FormattingObject(colourChooser.getValue(), (int) widthChooser.getValue(), fillbox.getValue());
 	}
@@ -104,8 +109,9 @@ public class FormatController implements Initializable{
 	public void eventUndo(){
 		MediatorController.getInstance().undo();
 	}
+	
 	public void eventRedo(){
-		MediatorController.getInstance().undo();
+		MediatorController.getInstance().redo();
 	}
 
 	public void loader(FormattingObject object){
@@ -118,4 +124,5 @@ public class FormatController implements Initializable{
 			System.out.println(object.toStringAll());
 		}
 	}
+
 }
