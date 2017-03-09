@@ -249,6 +249,28 @@ public class CanvasController implements Initializable {
         return save;
 	}
 	
+	public void delete(){
+		// Difference is that Undo delete remembers index of the shape
+		if(selected.size() == 1){
+			UndoInvoker.getInstance().addUndoCommand(new UndoCommand.UndoDelete(selected.get(0), shapes));
+			shapes.remove(selected.get(0));
+		}else{
+			
+			UndoInvoker.getInstance().addUndoCommand(new UndoCommand.UndoGroupDelete(selected, shapes));
+			for(Shape s : selected){
+				shapes.remove(s);
+			}
+		}
+		selected = new ArrayList<Shape>();
+	}
+	
+	public void copy(){
+		for(Shape s : selected){
+			shapes.add(s.clone());
+		}
+		System.out.println(selected.size());
+	}
+	
 	public FormattingObject loadFormats(ResourceBundle resources){
 		return new FormattingObject(Color.web(bundle.getString("color")),Integer.valueOf(bundle.getString("width")),bundle.getString("fill1"));
 	}

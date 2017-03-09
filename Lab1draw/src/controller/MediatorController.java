@@ -81,6 +81,14 @@ public class MediatorController implements MediatorControllerInterface, Observer
 		}
 	}
 
+	public void deleteSelectedShapes(){ 
+		this.canvasController.delete();
+	}
+	
+	public void copySelectedShapes(){
+		this.canvasController.copy();
+	}
+	
 	public void loadSaveFile(ArrayList<Shape> list){
 		this.canvasController.load(list);
 	}
@@ -99,11 +107,10 @@ public class MediatorController implements MediatorControllerInterface, Observer
 		return null;
 	}
 
+	
 	@Override
 	public void undo() {
-		if(UndoInvoker.getInstance().execute()){
-			this.formatController.setDisableUndo(true);
-		}
+		UndoInvoker.getInstance().execute();
 		//FormattingObject formatObject = new FormattingObject(Color.ANTIQUEWHITE,10,"Yes");
 		//FormattingObject formatObject = manager.undo(); 
 		//System.out.println(formatObject.toStringAll());

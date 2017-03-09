@@ -26,7 +26,7 @@ public abstract class Shape implements Cloneable, Serializable{
 	protected transient Color color = Color.BLACK;
 	protected boolean fill = false;
 	protected int strokewidth = 5;
-	protected boolean selected = true;
+	protected boolean selected = false;
 	
 	// Observable value (JavaFx property), Flag to indicate that the shape was altered
 	protected static SimpleBooleanProperty changed = new SimpleBooleanProperty(false);
@@ -120,7 +120,6 @@ public abstract class Shape implements Cloneable, Serializable{
 	// to "jump/move" when starting a reshape 
 	protected double shapeStartX, shapeStartY, mouseStartX, mouseStartY;
 	public void startMoveEvent(double mouse_x, double mouse_y) {
-		System.out.println("setting vals in shape");
 		shapeStartX = x;
 		shapeStartY = y;
 		mouseStartX = mouse_x;
@@ -132,7 +131,6 @@ public abstract class Shape implements Cloneable, Serializable{
 	 * Color (JavaFx property) is unserializable
 	 *=========================================*/
 	private void writeObject(ObjectOutputStream s) throws IOException{
-		System.out.println("Running WO");
 		 s.defaultWriteObject();
 		 s.writeDouble(color.getRed());
          s.writeDouble(color.getGreen());
@@ -154,7 +152,6 @@ public abstract class Shape implements Cloneable, Serializable{
 		try {
 			return (Shape) super.clone();
 		} catch (CloneNotSupportedException e) {
-			System.out.println("okej...");
 			e.printStackTrace();
 		}
 		return null;
