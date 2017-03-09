@@ -22,6 +22,8 @@ import model.pojo.FormattingObject;
 import model.pojo.ShapeType;
 import model.shapes.Shape;
 import model.shapes.ShapeFactory;
+import model.shapes.UndoCommand;
+import model.shapes.UndoInvoker;
 
 public class CanvasController implements Initializable {
 	private GraphicsContext gc;
@@ -44,7 +46,7 @@ public class CanvasController implements Initializable {
 		 	bundle = ResourceBundle.getBundle("bundles.loadingBundle", new Locale("fo","FO"));
 		 	formatObject = loadFormats(bundle);
 	    	gc = canvas.getGraphicsContext2D();
-	    	gc.setFill(Color.AQUAMARINE);
+	    	gc.setFill(Color.WHITE);
 	    	gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 	    	
 	    	// We don't need selected to be watched since all selected elements should
@@ -82,14 +84,8 @@ public class CanvasController implements Initializable {
 	    			}
 	    		}
 	    		// Redraw shapes since something was changed
-				System.out.println("Change in list");
 				clearDrawShapes();	
 	    	});
-	    	//System.out.println("Got type: " + test.get(0).getType());
-	    	//test.get(0).getType();
-	    	//line.getType();
-	    	//test.add(line);
-	    	//System.out.println(test.toString());
 	    	
 	    	canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>(){
 				@Override
@@ -100,11 +96,13 @@ public class CanvasController implements Initializable {
 						// Look through our place shapes, if
 						// any shape contains the clicked coordinates
 						// do something
+						System.out.println("Click source: " + event.getSource());
 						if(s.contains(event.getX(), event.getY())){
 							// Do something
 							deselect = false;
 							if(!selected.contains(s)){
 								selected.add(s);
+								s.setSelected(true);
 								System.out.println("Added one shape to selection");
 								
 								for(Shape selected : selected)
@@ -120,6 +118,9 @@ public class CanvasController implements Initializable {
 					}
 					// If the click was on the empty canvas, deselect shapes
 					if(deselect){
+						for(Shape s : selected){
+							s.setSelected(false);
+						}
 						selected = new ArrayList<Shape>();
 					}else{
 						// Update all selected shapes with the location clicked
@@ -179,11 +180,32 @@ public class CanvasController implements Initializable {
     		s.draw(gc);
     	}
     }
-	// The formating for the selected shapes were changed, perform changes and
-	// redraw. TODO: Color is not observed, if we change color the class wont be redrawn
+    
+    public void moveToFront(Shape s){
+    	shapes.remove(shapes.indexOf(s));
+		shapes.add(s);
+    }
+    
+    public void moveToBack(Shape s){
+    	shapes.remove(shapes.indexOf(s));
+		shapes.add(0,s);
+    }
+    
+    public void moveBack(Shape s){
+    	// TODO: move back 1 pos
+    }
+    
+    public void moveForward(Shape s){
+    	// TODO: move forward 1 pos
+    }
+	
+    // TODO: It might be better to keep the formats split, now we don't know what 
+    // was changed;
 	public void add(FormattingObject formattingClass) {
 		this.formatObject = formattingClass;
 		for(Shape s : selected){
+			
+			UndoInvoker.getInstance().addUndoCommand(new UndoCommand.UndoChangeColor(s, s.getColor()));
 			s.setColor(formattingClass.getColour());
 			// Might want a boolean instead
 			if(formattingClass.getFill().equals("YES"))
@@ -203,10 +225,10 @@ public class CanvasController implements Initializable {
 	}
 	
     public void AddShape(){
-    	System.out.println("Adding shape: " + shapeType.getShapeName());
     	Shape tmp = ShapeFactory.getShape(shapeType.getShapeName());
     	tmp.setFormat(formatObject);
     	shapes.add(tmp);
+    	UndoInvoker.getInstance().addUndoCommand(new UndoCommand.UndoAdd(tmp, shapes));
     }
     
     // Load function called by Mediator that replace the Shapes on the Canvas

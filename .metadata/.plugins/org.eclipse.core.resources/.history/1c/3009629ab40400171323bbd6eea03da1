@@ -7,7 +7,6 @@ package controller;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import javafx.scene.paint.Color;
 import model.pojo.FormattingObject;
 import model.pojo.ShapeType;
 import model.shapes.Shape;
@@ -21,6 +20,7 @@ public class MediatorController implements MediatorControllerInterface, Observer
 	private FormatController formatController;
 	private ShapeMenuController shapeMenuController;
 	private CanvasController canvasController;
+
 	
 	private MediatorController() {
 	}
@@ -75,11 +75,11 @@ public class MediatorController implements MediatorControllerInterface, Observer
 		}
 	}
 
-	public void loadSaveFile(ArrayList<Shape> list){
+	public void loadSaveFile(ArrayList<Shape> list) {
 		this.canvasController.load(list);
 	}
-	
-	public ArrayList<Shape> getShapeList(){
+
+	public ArrayList<Shape> getShapeList() {
 		return this.canvasController.getShapes();
 	}
 
@@ -95,11 +95,28 @@ public class MediatorController implements MediatorControllerInterface, Observer
 
 	@Override
 	public void undo() {
-		if(UndoInvoker.getInstance().execute()){
-			this.formatController.setDisableUndo(true);
-		}
-	
+<<<<<<< HEAD
+		// FormattingObject formatObject = new
+		// FormattingObject(Color.ANTIQUEWHITE,10,"Yes");
+		// FormattingObject formatObject = manager.undo();
+		// System.out.println(formatObject.toStringAll());
+		// FormattingObject formatObject = this.canvasController.undoAction();
+		// this.formatController.loader(formatObject);
 
 	}
 
+=======
+		if(UndoInvoker.getInstance().execute()){
+			this.formatController.setDisableUndo(true);
+		}
+		//FormattingObject formatObject = new FormattingObject(Color.ANTIQUEWHITE,10,"Yes");
+		//FormattingObject formatObject = manager.undo(); 
+		//System.out.println(formatObject.toStringAll());
+		//FormattingObject formatObject =  this.canvasController.undoAction();
+		//this.formatController.loader(formatObject);	
+	}
+
+
+
+>>>>>>> a4f7d8d26874e8a16c9c94abbc67351b28c9393d
 }

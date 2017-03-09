@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import model.pojo.FormattingObject;
@@ -58,12 +60,21 @@ public class FormatController implements Initializable{
 		String val =bundle.getString("width");
 		widthChooser.setValue(Double.valueOf(val));
 		labelWidth.setText(val);
+		
 		widthChooser.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				String value = Integer.toString((int) widthChooser.getValue());
-				formatObject.setWidth((int) widthChooser.getValue());
+				//formatObject.setWidth((int) widthChooser.getValue());
 				labelWidth.setText(value);
+			}
+		});
+		
+		widthChooser.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				formatObject.setWidth((int) widthChooser.getValue());
 			}
 		});
 		
@@ -82,6 +93,10 @@ public class FormatController implements Initializable{
 		return formatObject;
 	}
 
+	public void setDisableUndo(boolean b){
+			undoButton.setDisable(b);
+	}
+	
 	private FormattingObject getFormattingObject() {
 		return new FormattingObject(colourChooser.getValue(), (int) widthChooser.getValue(), fillbox.getValue());
 	}
