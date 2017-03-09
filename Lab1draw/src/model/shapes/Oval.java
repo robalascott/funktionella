@@ -4,6 +4,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 // TODO: figure out best way to move shape with hitbox
 public class Oval extends Shape{
@@ -17,14 +18,7 @@ public class Oval extends Shape{
 	public Oval(){
 		boundingBox = new Rectangle(50,20);
 		boundingBox.setHitBox(true);
-	}
-	
-	public Oval(Rectangle boundingBox, double width, double height){
-		this.boundingBox = boundingBox;
-		this.width = width;
-		this.height = height;
-	}
-	
+	}	
 	
 	@Override
 	public boolean contains(double pX, double pY) {
@@ -90,9 +84,7 @@ public class Oval extends Shape{
 			boundingBox.draw(gc);
 		}
 		if(isFilled()){
-			
 			gc.setFill(color);
-			//gc.fillOval(x, y, width, height);
 			gc.fillOval(boundingBox.getX(),boundingBox.getY(),boundingBox.getWidth(),boundingBox.getHeight());
 			
 		}else{
@@ -103,8 +95,16 @@ public class Oval extends Shape{
 	
 	@Override
 	public Shape clone() {
-		// Can't deep clone with clone
+		// Not sure how we can clone the other objects
+		Oval clone = (Oval)super.clone();
 		Rectangle BB = (Rectangle)boundingBox.clone();
-		return new Oval(BB, width, height);
+		clone.boundingBox = BB;
+		//clone.setSelected(false);
+		clone.selected = false;
+		// I don't understand this
+		// SetSelected uses this, causing problems
+		// clone.changed.set(newValue);
+		return clone;
+		//return new Oval(BB, this);
 	}
 }

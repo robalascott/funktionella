@@ -7,11 +7,11 @@ package controller;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-
-import controller.undo.UndoInvoker;
+import javafx.scene.paint.Color;
 import model.pojo.FormattingObject;
 import model.pojo.ShapeType;
 import model.shapes.Shape;
+import controller.undo.UndoInvoker;
 
 
 
@@ -69,6 +69,14 @@ public class MediatorController implements MediatorControllerInterface, Observer
 		}
 	}
 
+	public void deleteSelectedShapes(){ 
+		this.canvasController.delete();
+	}
+	
+	public void copySelectedShapes(){
+		this.canvasController.copy();
+	}
+	
 	public void loadSaveFile(ArrayList<Shape> list){
 		this.canvasController.load(list);
 	}
@@ -77,19 +85,15 @@ public class MediatorController implements MediatorControllerInterface, Observer
 		return this.canvasController.getShapes();
 	}
 
-
 	public void undo() {
 		UndoInvoker.getInstance().Undoexecute();
-		
 	}
 	
 	public void resetUndo(boolean b){
-		System.out.println("mediator " + b);
 		this.formatController.setDisableUndo(b);
 	}
 
 	public void resetRedo(Boolean b) {
-		System.out.println("mediator redo" + b);
 		this.formatController.setDisableRedo(b);
 	}
 

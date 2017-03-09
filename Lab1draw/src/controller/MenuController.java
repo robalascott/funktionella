@@ -35,13 +35,18 @@ public class MenuController implements Initializable{
 	}
 
 	public void delete(){
-		//System.out.println(MediatorController.getInstance().controllertestgetObject().toStringAll());
+		MediatorController.getInstance().deleteSelectedShapes();
 	}
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 	
 		
+	}
+	
+	@FXML
+	public void copy(ActionEvent event){
+		MediatorController.getInstance().copySelectedShapes();
 	}
 	
 	@FXML
