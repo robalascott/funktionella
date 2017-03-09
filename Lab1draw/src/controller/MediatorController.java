@@ -7,20 +7,20 @@ package controller;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import javafx.scene.paint.Color;
 import model.pojo.FormattingObject;
 import model.pojo.ShapeType;
 import model.shapes.Shape;
 
-public class MediatorController implements MediatorControllerInterface, Observer{
+
+
+public class MediatorController implements MediatorControllerInterface, Observer,Classes {
 
 	private MenuController menuController;
 	private FormatController formatController;
 	private ShapeMenuController shapeMenuController;
 	private CanvasController canvasController;
-	
 
-	/*Observable Class*/
+	
 	private MediatorController() {
 	}
 
@@ -33,61 +33,55 @@ public class MediatorController implements MediatorControllerInterface, Observer
 	}
 
 	@Override
-	public void registerController(MenuController menuController) {
-		this.menuController = menuController;
+	public void registerController(Object e) {
+		System.out.println(e.getClass().getTypeName());
 
-	}
-
-	@Override
-	public void registerController(FormatController formatController) {
-		this.formatController = formatController;
-		
-		if(this.formatController != null){
-			formatController.getFormattingClass().addObserver(this);	
-		}
-		
-		
-	}
-	@Override
-	public void registerController(CanvasController canvasController) {
-		this.canvasController = canvasController;
-	}
-
-	@Override
-	public void registerController(ShapeMenuController shapeMenuController) {
-		this.shapeMenuController =  shapeMenuController;
-		if(this.shapeMenuController  != null){
+		switch (e.getClass().getTypeName()) {
+		case menu:
+			this.menuController = (MenuController) e;
+			break;
+		case format:
+			this.formatController = (FormatController) e;
+			formatController.getFormattingClass().addObserver(this);
+			break;
+		case canvas:
+			this.canvasController = (CanvasController) e;
+			break;
+		case shape:
+			this.shapeMenuController = (ShapeMenuController) e;
 			this.shapeMenuController.ObjectShapeClass().addObserver(this);
-			System.out.println(shapeMenuController.ObjectShapeClass().toStringAll());	
+			System.out.println(shapeMenuController.ObjectShapeClass().toStringAll());
+			break;
+		default:
+			System.out.println("Failed to load: " + e.toString());
 		}
-	}
-	
 
+	}
 
 	@Override
 	public void update(Observable obs, Object arg1) {
-		if(obs instanceof FormattingObject ){
+		if (obs instanceof FormattingObject) {
 			System.out.println(this.formatController.getFormattingClass().toStringAll());
 			this.canvasController.add(this.formatController.getFormattingClass());
-//			UndoRedoManager.INSTANCE.add(this.formatController.getFormattingClass());
-			
-			//Send formating object to canvas here
+			// UndoRedoManager.INSTANCE.add(this.formatController.getFormattingClass());
+
+			// Send formating object to canvas here
 		}
-		if(obs instanceof ShapeType ){
+		if (obs instanceof ShapeType) {
 			System.out.println(this.shapeMenuController.ObjectShapeClass().toStringAll());
 			this.canvasController.addShape(this.shapeMenuController.ObjectShapeClass());
-			//Send formating object to canvas here
+			// Send formating object to canvas here
 		}
 	}
 
-	public void loadSaveFile(ArrayList<Shape> list){
+	public void loadSaveFile(ArrayList<Shape> list) {
 		this.canvasController.load(list);
 	}
-	
-	public ArrayList<Shape> getShapeList(){
+
+	public ArrayList<Shape> getShapeList() {
 		return this.canvasController.getShapes();
 	}
-	
+
 	@Override
 	public FormattingObject getFormattingClass() {
 		return null;
@@ -100,18 +94,13 @@ public class MediatorController implements MediatorControllerInterface, Observer
 
 	@Override
 	public void undo() {
-		//FormattingObject formatObject = new FormattingObject(Color.ANTIQUEWHITE,10,"Yes");
-		//FormattingObject formatObject = manager.undo(); 
-		//System.out.println(formatObject.toStringAll());
-		//FormattingObject formatObject =  this.canvasController.undoAction();
-		//this.formatController.loader(formatObject);
-		
+		// FormattingObject formatObject = new
+		// FormattingObject(Color.ANTIQUEWHITE,10,"Yes");
+		// FormattingObject formatObject = manager.undo();
+		// System.out.println(formatObject.toStringAll());
+		// FormattingObject formatObject = this.canvasController.undoAction();
+		// this.formatController.loader(formatObject);
+
 	}
-
-
-
-
-
-
 
 }

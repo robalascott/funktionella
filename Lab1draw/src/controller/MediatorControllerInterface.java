@@ -8,11 +8,7 @@ import model.pojo.ShapeType;
 
 
 public interface MediatorControllerInterface {
-	  void registerController(MenuController menuController);
-	  void registerController(FormatController formatController);
-	  void registerController(ShapeMenuController shapeMenuController);
-	  void registerController(CanvasController canvasController);
-	
+	  void registerController(Object e);	
 	  FormattingObject getFormattingClass();
 	  ShapeType ObjectNameClass(); 
 	  void undo();
