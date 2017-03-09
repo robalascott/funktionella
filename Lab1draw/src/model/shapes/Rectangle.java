@@ -1,5 +1,8 @@
 package model.shapes;
-
+/*HI2011, Laboration i designmönster
+ * Robert Scott & Daniel Östberg
+ * 2017-03
+ */
 import javafx.scene.canvas.GraphicsContext;
 import model.pojo.FormattingObject;
 

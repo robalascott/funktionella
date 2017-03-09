@@ -69,6 +69,9 @@ public class UndoInvoker extends Observable {
 			undostack.push(command);
 			undoIsEmpty.set(false);
 			undostack.peek();
+			if(redostack.isEmpty()){
+				redoIsEmpty.set(true);
+			}
 		} catch (EmptyStackException e) {
 			redoIsEmpty.set(true);
 		}

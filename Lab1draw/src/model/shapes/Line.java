@@ -1,5 +1,8 @@
 package model.shapes;
-
+/*HI2011, Laboration i designmönster
+ * Robert Scott & Daniel Östberg
+ * 2017-03
+ */
 import java.awt.event.MouseEvent;
 
 import com.sun.javafx.geom.Line2D;
@@ -10,9 +13,6 @@ import javafx.scene.paint.Color;
 
 public class Line extends Shape{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -9055652183992812239L;
 	
 	private enum MovePoint{STARTPOINT, ENDPOINT, NONE};

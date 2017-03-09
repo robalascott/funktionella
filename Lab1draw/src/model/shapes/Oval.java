@@ -1,5 +1,8 @@
 package model.shapes;
-
+/*HI2011, Laboration i designmönster
+ * Robert Scott & Daniel Östberg
+ * 2017-03
+ */
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 

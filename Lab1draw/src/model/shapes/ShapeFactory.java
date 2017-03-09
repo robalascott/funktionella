@@ -1,5 +1,8 @@
 package model.shapes;
-
+/*HI2011, Laboration i designmönster
+ * Robert Scott & Daniel Östberg
+ * 2017-03
+ */
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

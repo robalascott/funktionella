@@ -1,5 +1,8 @@
 package controller.undo;
-
+/*HI2011, Laboration i designmönster
+ * Robert Scott & Daniel Östberg
+ * 2017-03
+ */
 import java.util.ArrayList;
 
 /*HI2011, Laboration i designmönster
@@ -58,7 +61,7 @@ public interface Command {
 
 		@Override
 		public void redo() {
-
+			listRef.remove(shapeRef);
 			// fix this
 		}
 
