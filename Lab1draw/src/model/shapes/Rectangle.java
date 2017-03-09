@@ -30,8 +30,15 @@ public class Rectangle extends Shape{
 			gc.fillRect(x,y,width,height);
 		}else{
 			//gc.setLineWidth(strokewidth);
+			// TODO: Fix this the proper way, was just lazy
+			if(hitBox){
+				gc.setLineDashes(2.5d);
+			}else{
+				//gc.setLineWidth(strokewidth);
+			}
 			gc.setStroke(color);
 			gc.strokeRect(x, y, width, height);
+			gc.setLineDashes(0);
 		}
 	}
 
@@ -213,9 +220,38 @@ public class Rectangle extends Shape{
 		}
 		return false;
 	}
+	
+	public MovePoint getSelected(){
+		return selected;
+	}
 
 	@Override
 	String getType() {
 		return "Rectangle";
+	}
+	
+	/******TEST*********/
+	public double getX(){
+		return x;
+	}
+	public double getY(){
+		return y;
+	}
+	public double getWidth(){
+		return width;
+	}
+	public double getHeight(){
+		return height;
+	}
+	
+	private boolean hitBox = false;
+	
+	public void setHitBox(boolean b){
+		hitBox = b;
+	}
+	
+	// TODO: Change to double
+	public void setLineWidth(int w){
+		strokewidth = w;
 	}
 }

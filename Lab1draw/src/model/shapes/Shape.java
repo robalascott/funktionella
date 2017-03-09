@@ -21,10 +21,33 @@ import model.pojo.FormattingObject;
 
 // If we would have used the java.util.Observable, we would have extended shape with ti
 public abstract class Shape implements Cloneable, Serializable{
+	// Default properties for a shape
 	protected double x = 50,y = 50;
-	protected transient Color color = Color.PINK;
+	protected transient Color color = Color.BLACK;
 	protected boolean fill = false;
 	protected int strokewidth = 5;
+	protected boolean selected = true;
+	
+	// Observable value (JavaFx property), Flag to indicate that the shape was altered
+	protected static SimpleBooleanProperty changed = new SimpleBooleanProperty(false);
+	
+	/*Abstract methods that should be implemented when extending shape*/
+	// Draw the shape on the given context
+	abstract public void draw(GraphicsContext gc);	
+	// We want to alter the shape
+	abstract public boolean reshape(double x, double y);
+	abstract String getType();
+	
+	// Check if the given coordinates lies within the shape
+	// Currently sets the selectable reshape point
+	// not sure what the best approach is here
+	abstract public boolean contains(double x, double y);
+	
+	
+	public void setSelected(boolean selected){
+		this.selected = selected;
+		changed.set(true);
+	};
 	
 	public void setFill(boolean b){
 		this.fill = b;
@@ -43,8 +66,6 @@ public abstract class Shape implements Cloneable, Serializable{
 			strokewidth = format.getWidth();
 		}
 	}
-	
-	protected static SimpleBooleanProperty changed = new SimpleBooleanProperty(false);
 	
 	// I don't like that we have to define a method to setup observer
 	// although i think this is the equivalent of calling setChanged() 
@@ -84,16 +105,14 @@ public abstract class Shape implements Cloneable, Serializable{
 		//System.out.println("Moved to: " + this.x + ", " + this.y);
 	}
 	
-	// Check if the given coordinates lies within the shape
-	// Currently sets the selectable reshape point
-	// not sure what the best approach is here
-	abstract public boolean contains(double x, double y);
+	
 	public void setColor(Color color){
 		this.color = color;
+		changed.set(true);
 	}
-	abstract String getType();
-	abstract public boolean reshape(double x, double y);
-	abstract public void draw(GraphicsContext gc);
+	public Color getColor(){
+		return color;
+	}	
 
 	// Maby make abstract so individual shape only get "their stuff"
 	// When setting other startvalues in contains for example, there
@@ -108,6 +127,10 @@ public abstract class Shape implements Cloneable, Serializable{
 		mouseStartY = mouse_y;
 	}
 	
+	/*==============Serialisation==============//
+	 * We need to extend the regular serialisation since the
+	 * Color (JavaFx property) is unserializable
+	 *=========================================*/
 	private void writeObject(ObjectOutputStream s) throws IOException{
 		System.out.println("Running WO");
 		 s.defaultWriteObject();
@@ -120,34 +143,20 @@ public abstract class Shape implements Cloneable, Serializable{
 	
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
 		in.defaultReadObject();
-		//System.out.println("R:"+in.readDouble()+",G:"+in.read()+",B:"+in.readDouble());
 		this.color = new Color(in.readDouble(),in.readDouble(),in.readDouble(),in.readDouble());
 	}
+	//=========================================//
 	
-	
+	// Clone a shape
+	// TODO: Handle CloneNotSupportedException
 	@Override
 	public Shape clone(){
 		try {
 			return (Shape) super.clone();
 		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
+			System.out.println("okej...");
 			e.printStackTrace();
 		}
 		return null;
-			/*
-	        //System.out.println(getClass().getCanonicalName());
-	        Shape clone;
-			try {
-				clone = getClass().getCanonicalName();
-				return clone;
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| SecurityException e) {
-				// TODO Auto-generated catch block
-				
-				e.printStackTrace();
-			}
-
-	        return null;
-	        */
 	}
 }

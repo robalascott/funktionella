@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import model.pojo.FormattingObject;
 import model.pojo.ShapeType;
 import model.shapes.Shape;
+import model.shapes.UndoInvoker;
 
 public class MediatorController implements MediatorControllerInterface, Observer{
 
@@ -100,17 +101,15 @@ public class MediatorController implements MediatorControllerInterface, Observer
 
 	@Override
 	public void undo() {
+		if(UndoInvoker.getInstance().execute()){
+			this.formatController.setDisableUndo(true);
+		}
 		//FormattingObject formatObject = new FormattingObject(Color.ANTIQUEWHITE,10,"Yes");
 		//FormattingObject formatObject = manager.undo(); 
 		//System.out.println(formatObject.toStringAll());
 		//FormattingObject formatObject =  this.canvasController.undoAction();
-		//this.formatController.loader(formatObject);
-		
+		//this.formatController.loader(formatObject);	
 	}
-
-
-
-
 
 
 

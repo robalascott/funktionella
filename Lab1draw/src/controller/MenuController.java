@@ -23,11 +23,15 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import model.shapes.Shape;
+import model.shapes.UndoCommand;
+import model.shapes.UndoInvoker;
 
 
 public class MenuController implements Initializable{
-	@FXML private ToolBar ToolBar;
+	@FXML private HBox ToolBar;
+	private UndoInvoker invoker = UndoInvoker.getInstance();
 
 	public void exitProgram(){
 		 System.exit(0);
@@ -80,6 +84,8 @@ public class MenuController implements Initializable{
 	@FXML
 	@SuppressWarnings("unchecked")
 	public void load(){
+		
+		
 		TextInputDialog dialog = new TextInputDialog("Filename");
 		dialog.setTitle("Load");
 		dialog.setHeaderText("Load File");
@@ -126,5 +132,6 @@ public class MenuController implements Initializable{
 		    	  e.printStackTrace();
 		      }
 		});	
+		
 	}
 }
